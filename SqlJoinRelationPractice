@@ -1,0 +1,155 @@
+use Course
+
+SELECT SUBSTRING([Email],1,CHARINDEX('@',[Email])-1) FROM Teachers
+
+SELECT SUBSTRING([Email],CHARINDEX('@',[Email])+1,LEN([Email])) FROM Teachers
+
+SELECT SUBSTRING([Email],CHARINDEX('@',[Email])+1,LEN([Email])-CHARINDEX('@',[Email])+1) FROM Teachers
+
+SELECT *  FROM Students
+
+DELETE FROM Students
+
+TRUNCATE TABLE Students
+
+INSERT INTO Students([FullName],[Age],[Address])
+VALUES 
+('Reshad Agayev',21,'Neftciler'),
+('Ilgar Shiriyev',24,'Yasamal'),
+('Behruz Eliyev ',38,' Kurdexani'),
+('Hacixan Hacixanov',19,'Zaqatala')
+
+ALTER Table Students
+ADD SoftDelete bit default 0
+
+SELECT * FROM Students WHERE [SoftDelete]=0
+
+SELECT * FROM Students WHERE [SoftDelete]=1
+
+UPDATE Students
+set [SoftDelete]=1
+WHERE [Id]>2
+
+CREATE TABLE Countries(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50)
+)
+
+CREATE TABLE Cities(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50),
+    [CountryId] INT,
+    FOREIGN KEY(CountryId) REFERENCES Countries(Id)
+)
+
+SELECT * FROM Cities
+
+INSERT INTO  Countries([Name])
+VALUES
+('Almaniya'),
+('Suriya'),
+('Rusiya'),
+('Ukrayna')
+
+SELECT * FROM Countries
+
+
+INSERT INTO  Cities([Name],[CountryId])
+VALUES
+('Amsterdam',NUll),
+('Tokio',NULL)
+
+
+
+Select * FROM Cities Where [CountryId]=1
+
+CREATE TABLE Books(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50) 
+)
+
+CREATE TABLE Authors(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50),
+    [Email] NVARCHAR(50)
+)
+
+CREATE TABLE BookAuthors(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [BookId] int,
+    FOREIGN KEY ([BookId]) REFERENCES Books(Id),
+    [AuthorId] int,
+    FOREIGN KEY ([AuthorId]) REFERENCES Authors(Id)
+)
+
+select * from Books
+
+select * from Authors
+
+select * From BookAuthors
+
+INSERT INTO  Books([Name])
+VALUES
+('Ali ve Nino'),
+('Leyli ve Mecnun'),
+('Isgendername ')
+
+INSERT INTO  Authors([Name],[Email])
+VALUES
+('Author1','author1@gmail.com'),
+('Author2','author2@gmail.com'),
+('Author3','author3@gmail.com')
+
+
+INSERT INTO  BookAuthors([BookId],[AuthorId])
+VALUES
+(1,1),
+(2,1),
+(3,2),
+(1,2)
+
+SELECT ct.Name as 'City',ctr.Name as 'Country' FROM Cities ct
+INNER JOIN Countries ctr
+on ct.CountryId=ctr.Id
+
+SELECT ct.Name as 'City',ctr.Name as 'Country' FROM Cities ct
+LEFT JOIN Countries ctr
+on ct.CountryId=ctr.Id 
+
+SELECT ct.Name as 'City',ctr.Name as 'Country' FROM Cities ct
+RIGHT JOIN Countries ctr
+on ct.CountryId=ctr.Id
+
+SELECT ct.Name as 'City',ctr.Name as 'Country' FROM Cities ct
+FULL OUTER JOIN Countries ctr
+on ct.CountryId=ctr.Id
+
+SELECT a.Name as 'Author Name',a.Email as 'Author Email',b.Name as 'Book Name' FROM Authors a
+JOIN BookAuthors ba
+on a.Id=ba.AuthorId
+JOIN Books b
+on b.Id=ba.BookId
+
+Create Table Employees(
+    [Id] int Primary key IDENTITY(1,1),
+    [Name] nvarchar(50),
+    [ManagerId] int
+)
+
+select * from Employees
+
+INSERT INTO Employees([Name],[ManagerId])
+VALUES('Nesir',NULL),
+      ('Hacixan',1),
+      ('Reshad',1),
+      ('Elmir',3),
+      ('Sirac',1),
+      ('Nurlan',5),
+      ('Fatime',5),
+      (NULL,6),
+      (NULL,8)
+
+Select em1.Name 'Manager Name', em2.Name 'Employees Name' FROM
+Employees em1
+INNER JOIN Employees em2
+on em1.Id=em2.ManagerId
